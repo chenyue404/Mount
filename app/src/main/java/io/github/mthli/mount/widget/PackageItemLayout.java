@@ -35,6 +35,7 @@ public class PackageItemLayout extends RelativeLayout {
     private ImageView mUmountView;
     private TextView mLabelView;
     private TextView mVersionView;
+    private TextView mPackageNameView;
 
     public PackageItemLayout(Context context) {
         super(context);
@@ -56,6 +57,7 @@ public class PackageItemLayout extends RelativeLayout {
         mUmountView = (ImageView) findViewById(R.id.umount);
         mLabelView = (TextView) findViewById(R.id.label);
         mVersionView = (TextView) findViewById(R.id.version);
+        mPackageNameView = findViewById(R.id.package_name);
 
         setupUmountView();
     }
@@ -71,5 +73,6 @@ public class PackageItemLayout extends RelativeLayout {
         mUmountView.setVisibility(record.umount ? VISIBLE : GONE);
         mLabelView.setText(record.label);
         mVersionView.setText(record.version);
+        mPackageNameView.setText(record.name);
     }
 }

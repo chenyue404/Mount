@@ -25,6 +25,7 @@ import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -54,9 +55,9 @@ import io.github.mthli.mount.util.IntentUtils;
 import io.github.mthli.mount.util.PolicyUtils;
 import io.github.mthli.mount.util.RxUtils;
 import io.github.mthli.mount.util.ToastUtils;
+import io.github.mthli.mount.widget.PackageItemAdapter;
 import io.github.mthli.mount.widget.PackageSettingLayout;
 import io.github.mthli.mount.widget.PolicyHintLayout;
-import io.github.mthli.mount.widget.PackageItemAdapter;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -221,7 +222,7 @@ public class MountActivity extends Activity implements AbsListView.OnScrollListe
                     public void accept(Long aLong) throws Exception {
                         if (!PolicyUtils.isDeviceOwnerApp(MountActivity.this)) {
                             hideOptions();
-                            if (mListView.getHeaderViewsCount() <= 0){
+                            if (mListView.getHeaderViewsCount() <= 0) {
                                 mListView.addHeaderView(mHeaderView);
                             }
                         } else {
@@ -342,15 +343,19 @@ public class MountActivity extends Activity implements AbsListView.OnScrollListe
                             nameSet.add(record.name);
                         }
 
-                        // query all apps can launched from launcher
-                        Intent intent = new Intent(Intent.ACTION_MAIN);
-                        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-                        List<ResolveInfo> resolveInfoList = getPackageManager().queryIntentActivities(intent, 0);
+                        if (false) {
+                            // query all apps can launched from launcher
+                            Intent intent = new Intent(Intent.ACTION_MAIN);
+                            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                            List<ResolveInfo> resolveInfoList = getPackageManager().queryIntentActivities(intent, 0);
+                        }
+                        //加载所有应用
+                        List<PackageInfo> resolveInfoList = getPackageManager().getInstalledPackages(0);
 
                         // get all apps' application info
                         List<ApplicationInfo> applicationInfoList = new ArrayList<>();
-                        for (ResolveInfo info : resolveInfoList) {
-                            applicationInfoList.add(info.activityInfo.applicationInfo);
+                        for (PackageInfo info : resolveInfoList) {
+                            applicationInfoList.add(info.applicationInfo);
                         }
 
                         // filter we don't want
